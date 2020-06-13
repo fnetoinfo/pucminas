@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layouts/default(titulo='Ativos')">
+<body>
+	<div id="page" layout:fragment="content">
+		<div class="container is-fluid">
+			<div>
+				<a href="/ativo/cadastrar" class="button">Cadastrar ativo</a>
+			</div>
+
+			<br>
+
+			<div th:if="${itens.empty}" class="notification is-info is-light">
+				Não existem dados para exibir
+			</div>
+
+			<table th:if="${!itens.empty}"
+				class="table is-striped is-hoverable is-fullwidth">
+				<thead>
+					<tr>
+						<th class="is-narrow">Id</th>
+						<th>Nome</th>
+						<th class="is-narrow"></th>
+						<th class="is-narrow"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item : ${itens}">
+						<td th:text="${item.id}">Id</td>
+						<td th:text="${item.nome}">Nome</td>
+						<td><a th:href="@{'/ativo/editar/' + ${item.id}}"> Editar
+						</a></td>
+						<td><a th:href="@{'/ativo/deletar/' + ${item.id}}">Excluir
+						</a></td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+</body>
+</html>

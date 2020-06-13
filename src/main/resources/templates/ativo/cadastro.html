@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layouts/default(titulo='Ativos')">
+<body>
+	<div id="page" layout:fragment="content">
+		<div class="container is-fluid">
+
+			<form th:object="${model}" method="post" action="/ativo/cadastrar">
+			
+			<input class="input" type="hidden" th:field="*{id}" th:value="*{id}">
+			
+			<div class="field">
+				<label class="label">Nome</label>
+				<div class="control">
+					<input class="input" type="text" placeholder="Nome" th:field="*{nome}" th:value="*{nome}">
+				</div>
+			</div>
+
+			<div class="field">
+				<label class="label">Observações</label>
+				<div class="control">
+					<textarea class="textarea" placeholder="Observações" th:field="*{observacao}" th:text="*{observacao}"></textarea>
+				</div>
+			</div>
+
+			<div class="field is-grouped">
+				<div class="control">
+					<input type="submit" class="button is-link" value="Salvar" />
+				</div>
+				<div class="control">
+					<a href="/ativo/listar" class="button is-link is-light">Cancelar</a>
+				</div>
+			</div>
+			</form>
+
+		</div>
+	</div>
+</body>
+</html>

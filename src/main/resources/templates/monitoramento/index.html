@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layouts/default(titulo='Monitoramento')">
+<body>
+	<div id="page" layout:fragment="content">
+
+	<div id="mapa" class="hero is-fullheight-with-navbar"></div>
+
+	<div class="modal" id="modal">
+		  <div class="modal-background"></div>
+		  <div class="modal-card">
+		    <header class="modal-card-head">
+		      <p class="modal-card-title" id="modal-titulo"></p>
+		      <button id="modal-fechar" class="delete" aria-label="close"></button>
+		    </header>
+		    <section class="modal-card-body">
+		      <p>Latitude: <strong id="modal-latitude">...</strong></p>
+		      <p>Longitude: <strong id="modal-longitude">...</strong></p>
+		      <div id="modal-notificacao">
+		        <br />
+		      	<p>Mensagem: <strong id="modal-mensagem">...</strong></p>
+		      </div>
+		    </section>
+		  </div>
+		</div>
+	
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyArCC5NMdu4fljmOMC-wSP5MpUL-Q3k2rY&sensor=false"></script>
+
+	<script type="text/javascript">
+
+		document.querySelector('#modal-fechar').addEventListener('click', function(){
+			document.querySelector('#modal').classList.remove('is-active');
+		});
+				
+		var styles = [
+			{
+				"stylers": [
+					{
+						"visibility": "on"
+					}
+				]
+			},
+			{
+				"featureType": "road",
+				"stylers": [
+					{
+						"visibility": "on"
+					}
+				]
+			}
+		];	
+	
+		var map = new google.maps.Map(document.getElementById("mapa"), {
+			zoom: 3.9,
+			center: new google.maps.LatLng(-15.0195691,-26.9155006),
+			streetViewControl: false,
+			mapTypeId: "hybrid"
+		});
+		
+		map.setOptions({styles: styles});		
+			
+	</script>
+
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		var locations = /*[[${locais}]]*/
+		/*]]>*/
+		    
+		for (i = 0; i < locations.length; i++) {		
+			marker = new google.maps.Marker({
+				position: new google.maps.LatLng(locations[i].latitude, locations[i].longitude),
+				icon: {
+					path: google.maps.SymbolPath.CIRCLE,
+					strokeColor: 'gray',
+					strokeWeight: 1,
+					fillOpacity: 1,
+					fillColor: notificacaoToColor(locations[i].notificacao),
+					scale: 7
+				},
+				draggable: false,
+				map: map
+			});
+			
+			google.maps.event.addListener(marker, "click", (function(marker, i) {
+				return function() {
+					document.querySelector('#modal').classList.add('is-active');
+					document.querySelector('#modal-titulo').innerText = locations[i].nome;
+					document.querySelector('#modal-latitude').innerText = locations[i].latitude;
+					document.querySelector('#modal-longitude').innerText = locations[i].longitude;
+					
+					if (locations[i].notificacao != null) {
+						document.querySelector('#modal-notificacao').classList.remove('is-hidden');
+						document.querySelector('#modal-mensagem').innerText = locations[i].notificacao.mensagem;
+					} else {
+						document.querySelector('#modal-notificacao').classList.add('is-hidden');
+					}
+				}
+			})(marker, i));		
+		}	
+
+	
+    	function notificacaoToColor(notificacao) {
+    		
+    		if (notificacao != null) {
+    			switch (notificacao.nivel) {
+	  			  case 1:
+	  				  return "hsl(48, 100%, 67%)";
+	  			  case 2:
+	  				  return "hsl(30, 100%, 67%)";
+	  			  case 3:
+	  				  return "hsl(14, 100%, 50%)";  
+  				}	
+    		}
+    		    		
+    		return "hsl(141, 53%, 53%)";
+   		}
+    
+	</script>
+
+	</div>
+</body>
+</html>

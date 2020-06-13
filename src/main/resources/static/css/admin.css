@@ -1,0 +1,26 @@
+html, body {
+	background: #ECF0F3;
+}
+
+nav.navbar {
+	border-top: 4px solid #276cda;
+	margin-bottom: 1rem;
+}
+
+.navbar-item.brand-text {
+	font-weight: 300;
+}
+
+.navbar-item, .navbar-link {
+	font-size: 14px;
+	font-weight: 500;
+}
+
+#navMenu .navbar-item:hover {
+	text-decoration: underline;	
+}
+
+#mapa {
+	background-color: #AADAFF;	
+	width: 100%
+}
